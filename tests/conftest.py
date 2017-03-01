@@ -211,7 +211,8 @@ def sqlalchemy_session_datastore(request, app, tmpdir):
 
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + path
 
-    engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], convert_unicode=True)
+    engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], \
+                           convert_unicode=True)
     db_session = scoped_session(sessionmaker(autocommit=False,
                                              autoflush=False,
                                              bind=engine))

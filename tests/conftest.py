@@ -220,17 +220,19 @@ def sqlalchemy_session_datastore(request, app, tmpdir):
     Base.query = db_session.query_property()
 
     class RolesUsers(Base):
-        __tablename__ = 'roles_users',
+        __tablename__ = 'roles_users'
         id = Column(Integer(), primary_key=True)
         user_id = Column('user_id', Integer(), ForeignKey('user.id'))
         role_id = Column('role_id', Integer(), ForeignKey('role.id'))
 
     class Role(Base, RoleMixin):
+        __tablename__ = 'role'
         id = Column(Integer(), primary_key=True)
         name = Column(String(80), unique=True)
         description = Column(String(255))
 
     class User(Base, UserMixin):
+        __tablename__ = 'user'
         id = Column(Integer, primary_key=True)
         email = Column(String(255), unique=True)
         username = Column(String(255))

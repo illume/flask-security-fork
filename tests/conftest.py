@@ -211,7 +211,7 @@ def sqlalchemy_session_datastore(request, app, tmpdir):
 
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + path
 
-    engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'], \
+    engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'],
                            convert_unicode=True)
     db_session = scoped_session(sessionmaker(autocommit=False,
                                              autoflush=False,
@@ -396,7 +396,8 @@ def get_message(app):
     return fn
 
 
-@pytest.fixture(params=['sqlalchemy', 'sqlalchemy-session', 'mongoengine', 'peewee', 'pony'])
+@pytest.fixture(params=['sqlalchemy', 'sqlalchemy-session', 'mongoengine',
+                        'peewee', 'pony'])
 def datastore(
         request,
         sqlalchemy_datastore,

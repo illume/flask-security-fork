@@ -220,8 +220,8 @@ def sqlalchemy_session_datastore(request, app, tmpdir):
 
     roles_users = Table(
         'roles_users',
-        db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
-        db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
+        Column('user_id', Integer(), ForeignKey('user.id')),
+        Column('role_id', Integer(), ForeignKey('role.id')))
 
     class Role(Base, RoleMixin):
         id = Column(Integer(), primary_key=True)

@@ -204,7 +204,7 @@ def sqlalchemy_session_datastore(request, app, tmpdir):
     from sqlalchemy.orm import scoped_session, sessionmaker, relationship
     from sqlalchemy.ext.declarative import declarative_base
     from sqlalchemy import Boolean, DateTime, Column, Integer, String, \
-        ForeignKey, Table
+        ForeignKey
 
     f, path = tempfile.mkstemp(
         prefix='flask-security-test-db', suffix='.db', dir=str(tmpdir))
@@ -219,10 +219,10 @@ def sqlalchemy_session_datastore(request, app, tmpdir):
     Base = declarative_base()
     Base.query = db_session.query_property()
 
-    roles_users = Table(
-        'roles_users',
-        Column('user_id', Integer(), ForeignKey('user.id')),
-        Column('role_id', Integer(), ForeignKey('role.id')))
+    class RolesUsers(Base):
+        __tablename__ = 'roles_users',
+        user_id = Column('user_id', Integer(), ForeignKey('user.id'))
+        role_id = Column('role_id', Integer(), ForeignKey('role.id'))
 
     class Role(Base, RoleMixin):
         id = Column(Integer(), primary_key=True)
@@ -241,7 +241,7 @@ def sqlalchemy_session_datastore(request, app, tmpdir):
         login_count = Column(Integer)
         active = Column(Boolean())
         confirmed_at = Column(DateTime())
-        roles = relationship('Role', secondary=roles_users,
+        roles = relationship('Role', secondary='roles_users',
                              backref='users', lazy='dynamic')
 
     with app.app_context():

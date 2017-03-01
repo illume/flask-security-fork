@@ -241,7 +241,7 @@ def sqlalchemy_session_datastore(request, app, tmpdir):
         active = Column(Boolean())
         confirmed_at = Column(DateTime())
         roles = relationship('Role', secondary=roles_users,
-                                backref='users', lazy='dynamic')
+                             backref='users', lazy='dynamic')
 
     with app.app_context():
         Base.metadata.create_all(bind=engine)

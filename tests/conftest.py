@@ -203,7 +203,8 @@ def sqlalchemy_session_datastore(request, app, tmpdir):
     from sqlalchemy import create_engine
     from sqlalchemy.orm import scoped_session, sessionmaker, relationship
     from sqlalchemy.ext.declarative import declarative_base
-    from sqlalchemy import Boolean, DateTime, Column, Integer, String
+    from sqlalchemy import Boolean, DateTime, Column, Integer, String, \
+        ForeignKey
 
     f, path = tempfile.mkstemp(
         prefix='flask-security-test-db', suffix='.db', dir=str(tmpdir))

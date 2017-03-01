@@ -255,6 +255,24 @@ class SQLAlchemyUserDatastore(SQLAlchemyDatastore, UserDatastore):
         return self.role_model.query.filter_by(name=role).first()
 
 
+class PretendFlaskSQLAlchemyDb(object):
+    """ This is a pretend db object, so we can just pass in a session.
+    """
+    def __init__(self, session):
+        self.session = session
+
+
+class SQLAlchemySessionUserDatastore(SQLAlchemyUserDatastore):
+    """A SQLAlchemy datastore implementation for Flask-Security that assumes the
+    use of the flask_sqlalchemy_session extension.
+    """
+    def __init__(self, session, user_model, role_model):
+        SQLAlchemyUserDatastore.__init__(self,
+                                         PretendFlaskSQLAlchemyDb(session),
+                                         user_model,
+                                         role_model)
+
+
 class MongoEngineUserDatastore(MongoEngineDatastore, UserDatastore):
     """A MongoEngine datastore implementation for Flask-Security that assumes
     the use of the Flask-MongoEngine extension.

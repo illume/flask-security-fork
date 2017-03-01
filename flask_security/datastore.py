@@ -262,7 +262,8 @@ class PretendFlaskSQLAlchemyDb(object):
         self.session = session
 
 
-class SQLAlchemySessionUserDatastore(SQLAlchemyUserDatastore, SQLAlchemyDatastore):
+class SQLAlchemySessionUserDatastore(SQLAlchemyUserDatastore,
+                                     SQLAlchemyDatastore):
     """A SQLAlchemy datastore implementation for Flask-Security that assumes the
     use of the flask_sqlalchemy_session extension.
     """

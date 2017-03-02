@@ -273,6 +273,10 @@ class SQLAlchemySessionUserDatastore(SQLAlchemyUserDatastore):
             """ Pretend db object we can just pass in a session.
             """
             def __init__(self, session):
+                # old flask-sqlalchemy adds this weird attribute for tracking.
+                # http://stackoverflow.com/questions/20201809/sqlalchemy-flask-attributeerror-session-object-has-no-attribute-model-chan
+                if not hasattr(session, '_model_changes'):
+                    session._model_changes = {}
                 self.session = session
 
         SQLAlchemyUserDatastore.__init__(self,

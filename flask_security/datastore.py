@@ -249,9 +249,11 @@ class SQLAlchemyUserDatastore(SQLAlchemyDatastore, UserDatastore):
         return True
 
     def find_user(self, **kwargs):
+        """Returns a user matching the provided parameters."""
         return self.db.session.query(self.user_model).filter_by(**kwargs).first()
 
     def find_role(self, role):
+        """Returns a role matching the provided name."""
         return self.db.session.query(self.role_model).filter_by(name=role).first()
 
 

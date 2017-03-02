@@ -273,16 +273,23 @@ class SQLAlchemySessionUserDatastore(SQLAlchemyUserDatastore):
             """ Pretend db object we can just pass in a session.
             """
             def __init__(self, session):
-                # old flask-sqlalchemy adds this weird attribute for tracking.
-                # http://stackoverflow.com/questions/20201809/sqlalchemy-flask-attributeerror-session-object-has-no-attribute-model-chan
-                if not hasattr(session, '_model_changes'):
-                    session._model_changes = {}
                 self.session = session
 
         SQLAlchemyUserDatastore.__init__(self,
                                          PretendFlaskSQLAlchemyDb(session),
                                          user_model,
                                          role_model)
+
+    def commit(self):
+        # Old flask-sqlalchemy adds this weird attribute for tracking
+        # to Session. flask-sqlalchemy 2.0 does things more nicely.
+        # http://stackoverflow.com/questions/20201809/sqlalchemy-flask-attributeerror-session-object-has-no-attribute-model-chan
+        try:
+            self.db.session.commit()
+        except AttributeError:
+            import sqlalchemy
+            sqlalchemy.orm.Session._model_changes = {}
+            self.db.session.commit()
 
     def add_role_to_user(self, user, role):
         """Adds a role to a user.

@@ -280,6 +280,26 @@ class SQLAlchemySessionUserDatastore(SQLAlchemyUserDatastore):
                                          user_model,
                                          role_model)
 
+    def add_role_to_user(self, user, role):
+        """Adds a role to a user.
+
+        :param user: The user to manipulate
+        :param role: The role to add to the user
+        """
+        ret = SQLAlchemyUserDatastore.add_role_to_user(self, user, role)
+        self.db.session.flush()
+        return ret
+
+    def remove_role_from_user(self, user, role):
+        """Removes a role from a user.
+
+        :param user: The user to manipulate
+        :param role: The role to remove from the user
+        """
+        ret = SQLAlchemyUserDatastore.remove_role_from_user(self, user, role)
+        self.db.session.flush()
+        return ret
+
 
 class MongoEngineUserDatastore(MongoEngineDatastore, UserDatastore):
     """A MongoEngine datastore implementation for Flask-Security that assumes

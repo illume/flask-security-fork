@@ -234,10 +234,10 @@ class SQLAlchemyUserDatastore(SQLAlchemyDatastore, UserDatastore):
 
     def get_user(self, identifier):
         if self._is_numeric(identifier):
-            return self.user_model.query.get(identifier)
+            return self.db.session.query(self.user_model).get(identifier)
         for attr in get_identity_attributes():
             query = getattr(self.user_model, attr).ilike(identifier)
-            rv = self.user_model.query.filter(query).first()
+            rv = self.db.session.query(self.user_model).filter(query).first()
             if rv is not None:
                 return rv
 
@@ -249,25 +249,24 @@ class SQLAlchemyUserDatastore(SQLAlchemyDatastore, UserDatastore):
         return True
 
     def find_user(self, **kwargs):
-        return self.user_model.query.filter_by(**kwargs).first()
+        return self.db.session.query(self.user_model).filter_by(**kwargs).first()
 
     def find_role(self, role):
-        return self.role_model.query.filter_by(name=role).first()
+        return self.db.session.query(self.role_model).filter_by(name=role).first()
 
 
-class PretendFlaskSQLAlchemyDb(object):
-    """ This is a pretend db object, so we can just pass in a session.
-    """
-    def __init__(self, session):
-        self.session = session
-
-
-class SQLAlchemySessionUserDatastore(SQLAlchemyUserDatastore,
-                                     SQLAlchemyDatastore):
+class SQLAlchemySessionUserDatastore(SQLAlchemyUserDatastore):
     """A SQLAlchemy datastore implementation for Flask-Security that assumes the
     use of the flask_sqlalchemy_session extension.
     """
     def __init__(self, session, user_model, role_model):
+
+        class PretendFlaskSQLAlchemyDb(object):
+            """ Pretend db object we can just pass in a session.
+            """
+            def __init__(self, session):
+                self.session = session
+
         SQLAlchemyUserDatastore.__init__(self,
                                          PretendFlaskSQLAlchemyDb(session),
                                          user_model,

@@ -282,14 +282,11 @@ class SQLAlchemySessionUserDatastore(SQLAlchemyUserDatastore,
             if rv is not None:
                 return rv
 
-
     def find_user(self, **kwargs):
         return self.session.query(self.user_model).filter_by(**kwargs).first()
 
-
     def find_role(self, role):
         return self.session.query(self.user_model).filter_by(name=role).first()
-
 
 
 class MongoEngineUserDatastore(MongoEngineDatastore, UserDatastore):
